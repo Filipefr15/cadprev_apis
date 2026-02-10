@@ -39,9 +39,11 @@ func (h *DataHandler) IngestAll(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(map[string]string{
+	if err := json.NewEncoder(w).Encode(map[string]string{
 		"message": "Data ingestion completed successfully",
-	})
+	}); err != nil {
+		log.Printf("Error encoding JSON response: %v", err)
+	}
 }
 
 // IngestByID handles POST /api/ingest/{id} - ingests specific data by ID
@@ -71,7 +73,9 @@ func (h *DataHandler) IngestByID(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(data)
+	if err := json.NewEncoder(w).Encode(data); err != nil {
+		log.Printf("Error encoding JSON response: %v", err)
+	}
 }
 
 // GetAll handles GET /api/data - retrieves all data
@@ -91,7 +95,9 @@ func (h *DataHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(dataList)
+	if err := json.NewEncoder(w).Encode(dataList); err != nil {
+		log.Printf("Error encoding JSON response: %v", err)
+	}
 }
 
 // GetByID handles GET /api/data/{id} - retrieves specific data by ID
@@ -120,15 +126,19 @@ func (h *DataHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(data)
+	if err := json.NewEncoder(w).Encode(data); err != nil {
+		log.Printf("Error encoding JSON response: %v", err)
+	}
 }
 
 // Health handles GET /health - health check endpoint
 func (h *DataHandler) Health(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]string{
+	if err := json.NewEncoder(w).Encode(map[string]string{
 		"status": "healthy",
-	})
+	}); err != nil {
+		log.Printf("Error encoding JSON response: %v", err)
+	}
 }
 
 // RegisterRoutes sets up all HTTP routes
