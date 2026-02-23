@@ -1,0 +1,124 @@
+definitions:
+  entity.Dair_carteira:
+    properties:
+      dt_ano:
+        type: string
+      dt_mes_bimestre:
+        type: string
+      id_ativo:
+        type: string
+      no_ente:
+        type: string
+      no_fundo:
+        type: string
+      no_segmento:
+        type: string
+      no_tipo_ativo:
+        type: string
+      nr_cnpj_entidade:
+        type: string
+      pc_cmn:
+        type: string
+      pc_patrimonio:
+        type: string
+      pc_rpps:
+        type: string
+      qt_rpps:
+        type: string
+      sg_uf:
+        type: string
+      vl_atual_ativo:
+        $ref: '#/definitions/entity.DecimalOrString'
+      vl_patrimonio:
+        $ref: '#/definitions/entity.DecimalOrString'
+      vl_total_atual:
+        $ref: '#/definitions/entity.DecimalOrString'
+    type: object
+  entity.DecimalOrString:
+    properties:
+      decimal.Decimal:
+        type: number
+    type: object
+info:
+  contact: {}
+paths:
+  /buscar_dair_carteira:
+    post:
+      consumes:
+      - application/json
+      description: Initiates a process to fetch and store data from an external API
+      parameters:
+      - description: State
+        in: query
+        name: sg_uf
+        type: string
+      - description: Entity Name
+        in: query
+        name: no_ente
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Fetch initiated successfully
+          schema:
+            type: string
+        "500":
+          description: API fetch error
+          schema:
+            type: string
+      summary: Trigger data fetching from external API
+      tags:
+      - dair_carteira
+  /dair_carteira:
+    get:
+      consumes:
+      - application/json
+      description: Fetch data from the database with optional filters
+      parameters:
+      - description: Year
+        in: query
+        name: dt_ano
+        required: true
+        type: string
+      - description: CNPJ
+        in: query
+        name: nr_cnpj
+        type: string
+      - description: Entity Name
+        in: query
+        name: no_ente
+        type: string
+      - description: Month
+        in: query
+        name: mes
+        type: string
+      - description: Segment
+        in: query
+        name: segmento
+        type: string
+      - description: State
+        in: query
+        name: sg_uf
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.Dair_carteira'
+            type: array
+        "400":
+          description: Missing required parameters
+          schema:
+            type: string
+        "500":
+          description: Database error
+          schema:
+            type: string
+      summary: Retrieve Dair Carteira data
+      tags:
+      - dair_carteira
+swagger: "2.0"
