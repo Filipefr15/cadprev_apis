@@ -123,9 +123,387 @@
                     }
                 }
             }
+        },
+        "/dashboard/composicao-segmento": {
+            "get": {
+                "description": "Retrieve asset composition grouped by segment for a specific month",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dashboard"
+                ],
+                "summary": "Get composition by segment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "CNPJ",
+                        "name": "nr_cnpj",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Year",
+                        "name": "dt_ano",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Month/Bimonthly",
+                        "name": "dt_mes_bimestre",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.ComposicaoSegmentoResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing required parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Database error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/dashboard/evolucao-anual": {
+            "get": {
+                "description": "Retrieve annual patrimony evolution for a specific entity",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dashboard"
+                ],
+                "summary": "Get annual evolution",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "CNPJ",
+                        "name": "nr_cnpj",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.EvolucaoAnualResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing required parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Database error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/dashboard/patrimonio-mensal": {
+            "get": {
+                "description": "Retrieve total patrimony values grouped by month for a specific entity",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dashboard"
+                ],
+                "summary": "Get monthly patrimony",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "CNPJ",
+                        "name": "nr_cnpj",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Year",
+                        "name": "dt_ano",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.PatrimonioMensalResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing required parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Database error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/dashboard/resumo": {
+            "get": {
+                "description": "Retrieve all dashboard data aggregated (patrimony, composition, evolution, variation)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dashboard"
+                ],
+                "summary": "Get complete dashboard summary",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "CNPJ",
+                        "name": "nr_cnpj",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Year",
+                        "name": "dt_ano",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Month/Bimonthly",
+                        "name": "dt_mes_bimestre",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.ResumoDashboardResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Missing required parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Database error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/dashboard/variacao-mensal": {
+            "get": {
+                "description": "Retrieve monthly variation percentages for profitability analysis",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dashboard"
+                ],
+                "summary": "Get monthly variation (profitability)",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "CNPJ",
+                        "name": "nr_cnpj",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Year",
+                        "name": "dt_ano",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.VariacaoMensalResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing required parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Database error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "domain.ComposicaoSegmentoResponse": {
+            "type": "object",
+            "properties": {
+                "dt_ano": {
+                    "type": "string"
+                },
+                "dt_mes_bimestre": {
+                    "type": "string"
+                },
+                "no_segmento": {
+                    "type": "string"
+                },
+                "percentual": {
+                    "type": "number"
+                },
+                "valor_segmento": {
+                    "type": "number"
+                }
+            }
+        },
+        "domain.EvolucaoAnualResponse": {
+            "type": "object",
+            "properties": {
+                "dt_ano": {
+                    "type": "string"
+                },
+                "no_ente": {
+                    "type": "string"
+                },
+                "patrimonio_total": {
+                    "type": "number"
+                }
+            }
+        },
+        "domain.PatrimonioMensalResponse": {
+            "type": "object",
+            "properties": {
+                "dt_ano": {
+                    "type": "string"
+                },
+                "dt_mes_bimestre": {
+                    "type": "string"
+                },
+                "no_ente": {
+                    "type": "string"
+                },
+                "patrimonio_total": {
+                    "type": "number"
+                }
+            }
+        },
+        "domain.ResumoDashboardResponse": {
+            "type": "object",
+            "properties": {
+                "composicao_segmento": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.ComposicaoSegmentoResponse"
+                    }
+                },
+                "evolucao_anual": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.EvolucaoAnualResponse"
+                    }
+                },
+                "patrimonio_mensal": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.PatrimonioMensalResponse"
+                    }
+                },
+                "variacao_mensal": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.VariacaoMensalResponse"
+                    }
+                }
+            }
+        },
+        "domain.VariacaoMensalResponse": {
+            "type": "object",
+            "properties": {
+                "dt_ano": {
+                    "type": "string"
+                },
+                "dt_mes_bimestre": {
+                    "type": "string"
+                },
+                "no_ente": {
+                    "type": "string"
+                },
+                "patrimonio_anterior": {
+                    "type": "number"
+                },
+                "patrimonio_atual": {
+                    "type": "number"
+                },
+                "variacao_absoluta": {
+                    "type": "number"
+                },
+                "variacao_percentual": {
+                    "type": "number"
+                }
+            }
+        },
         "entity.Dair_carteira": {
             "type": "object",
             "properties": {

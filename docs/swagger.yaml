@@ -1,4 +1,73 @@
 definitions:
+  domain.ComposicaoSegmentoResponse:
+    properties:
+      dt_ano:
+        type: string
+      dt_mes_bimestre:
+        type: string
+      no_segmento:
+        type: string
+      percentual:
+        type: number
+      valor_segmento:
+        type: number
+    type: object
+  domain.EvolucaoAnualResponse:
+    properties:
+      dt_ano:
+        type: string
+      no_ente:
+        type: string
+      patrimonio_total:
+        type: number
+    type: object
+  domain.PatrimonioMensalResponse:
+    properties:
+      dt_ano:
+        type: string
+      dt_mes_bimestre:
+        type: string
+      no_ente:
+        type: string
+      patrimonio_total:
+        type: number
+    type: object
+  domain.ResumoDashboardResponse:
+    properties:
+      composicao_segmento:
+        items:
+          $ref: '#/definitions/domain.ComposicaoSegmentoResponse'
+        type: array
+      evolucao_anual:
+        items:
+          $ref: '#/definitions/domain.EvolucaoAnualResponse'
+        type: array
+      patrimonio_mensal:
+        items:
+          $ref: '#/definitions/domain.PatrimonioMensalResponse'
+        type: array
+      variacao_mensal:
+        items:
+          $ref: '#/definitions/domain.VariacaoMensalResponse'
+        type: array
+    type: object
+  domain.VariacaoMensalResponse:
+    properties:
+      dt_ano:
+        type: string
+      dt_mes_bimestre:
+        type: string
+      no_ente:
+        type: string
+      patrimonio_anterior:
+        type: number
+      patrimonio_atual:
+        type: number
+      variacao_absoluta:
+        type: number
+      variacao_percentual:
+        type: number
+    type: object
   entity.Dair_carteira:
     properties:
       dt_ano:
@@ -121,4 +190,187 @@ paths:
       summary: Retrieve Dair Carteira data
       tags:
       - dair_carteira
+  /dashboard/composicao-segmento:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve asset composition grouped by segment for a specific month
+      parameters:
+      - description: CNPJ
+        in: query
+        name: nr_cnpj
+        required: true
+        type: string
+      - description: Year
+        in: query
+        name: dt_ano
+        required: true
+        type: string
+      - description: Month/Bimonthly
+        in: query
+        name: dt_mes_bimestre
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.ComposicaoSegmentoResponse'
+            type: array
+        "400":
+          description: Missing required parameters
+          schema:
+            type: string
+        "500":
+          description: Database error
+          schema:
+            type: string
+      summary: Get composition by segment
+      tags:
+      - dashboard
+  /dashboard/evolucao-anual:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve annual patrimony evolution for a specific entity
+      parameters:
+      - description: CNPJ
+        in: query
+        name: nr_cnpj
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.EvolucaoAnualResponse'
+            type: array
+        "400":
+          description: Missing required parameters
+          schema:
+            type: string
+        "500":
+          description: Database error
+          schema:
+            type: string
+      summary: Get annual evolution
+      tags:
+      - dashboard
+  /dashboard/patrimonio-mensal:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve total patrimony values grouped by month for a specific
+        entity
+      parameters:
+      - description: CNPJ
+        in: query
+        name: nr_cnpj
+        required: true
+        type: string
+      - description: Year
+        in: query
+        name: dt_ano
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.PatrimonioMensalResponse'
+            type: array
+        "400":
+          description: Missing required parameters
+          schema:
+            type: string
+        "500":
+          description: Database error
+          schema:
+            type: string
+      summary: Get monthly patrimony
+      tags:
+      - dashboard
+  /dashboard/resumo:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all dashboard data aggregated (patrimony, composition,
+        evolution, variation)
+      parameters:
+      - description: CNPJ
+        in: query
+        name: nr_cnpj
+        required: true
+        type: string
+      - description: Year
+        in: query
+        name: dt_ano
+        required: true
+        type: string
+      - description: Month/Bimonthly
+        in: query
+        name: dt_mes_bimestre
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.ResumoDashboardResponse'
+        "400":
+          description: Missing required parameters
+          schema:
+            type: string
+        "500":
+          description: Database error
+          schema:
+            type: string
+      summary: Get complete dashboard summary
+      tags:
+      - dashboard
+  /dashboard/variacao-mensal:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve monthly variation percentages for profitability analysis
+      parameters:
+      - description: CNPJ
+        in: query
+        name: nr_cnpj
+        required: true
+        type: string
+      - description: Year
+        in: query
+        name: dt_ano
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.VariacaoMensalResponse'
+            type: array
+        "400":
+          description: Missing required parameters
+          schema:
+            type: string
+        "500":
+          description: Database error
+          schema:
+            type: string
+      summary: Get monthly variation (profitability)
+      tags:
+      - dashboard
 swagger: "2.0"

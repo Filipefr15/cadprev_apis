@@ -65,9 +65,20 @@ func setupRouter(db *sql.DB) *chi.Mux {
 		MaxAge:           300, // Cache pré-voo por 5 minutos
 	}))
 
-	// Define suas rotas aqui
-	handler := handler.NewDairCarteiraHandler(usecase.NewDairCarteiraUseCase(db))
-	router.Get("/dair_carteira", handler.GetDairCarteiraHandler)
+	// Rotas para Dair Carteira
+	dairHandler := handler.NewDairCarteiraHandler(usecase.NewDairCarteiraUseCase(db))
+	router.Get("/dair_carteira", dairHandler.GetDairCarteiraHandler)
+	router.Post("/buscar_dair_carteira", dairHandler.BuscarDairCarteiraHandler)
+
+	// Rotas para Dashboard
+	dashboardHandler := handler.NewDashboardHandler(usecase.NewDashboardUseCase(db))
+	router.Get("/dashboard/patrimonio-mensal", dashboardHandler.GetPatrimonioMensalHandler)
+	router.Get("/dashboard/composicao-segmento", dashboardHandler.GetComposicaoSegmentoHandler)
+	router.Get("/dashboard/evolucao-anual", dashboardHandler.GetEvolucaoAnualHandler)
+	router.Get("/dashboard/variacao-mensal", dashboardHandler.GetVariacaoMensalHandler)
+	router.Get("/dashboard/resumo", dashboardHandler.GetResumoDashboardHandler)
+
+	// Swagger
 	router.Get("/swagger/*", httpSwagger.WrapHandler)
 
 	return router
