@@ -9,12 +9,14 @@ import (
 )
 
 type DairCarteiraUseCase struct {
-	db *sql.DB
+	db      *sql.DB
+	baseURL string
 }
 
-func NewDairCarteiraUseCase(db *sql.DB) *DairCarteiraUseCase {
+func NewDairCarteiraUseCase(db *sql.DB, baseURL string) *DairCarteiraUseCase {
 	return &DairCarteiraUseCase{
-		db: db,
+		db:      db,
+		baseURL: baseURL,
 	}
 }
 
@@ -23,8 +25,7 @@ func (uc *DairCarteiraUseCase) GetDairCarteira(ctx context.Context, params map[s
 }
 
 func (uc *DairCarteiraUseCase) BuscarDairCarteira(ctx context.Context, params map[string]string) error {
-	baseURL := "https://apicadprev.trabalho.gov.br"
-	items, err := api.FetchDairCarteira(ctx, baseURL, params)
+	items, err := api.FetchDairCarteira(ctx, uc.baseURL, params)
 	if err != nil {
 		return err
 	}

@@ -19,7 +19,7 @@ import (
 func main() {
 	// Carregar .env
 	if err := godotenv.Load(); err != nil {
-		log.Fatal("Erro ao carregar .env: ", err)
+		log.Println("Erro ao carregar .env: ", err)
 	}
 
 	dbPath := getEnv("SQLITE_DB_PATH", "./cadprev.db")
@@ -34,13 +34,16 @@ func main() {
 		log.Fatal("Erro ao criar tabela: ", err)
 	}
 
+	// Carregar baseURL da API
+	baseURL := getEnv("API_BASE_URL", "https://apicadprev.trabalho.gov.br")
+
 	// Inicializar Swagger
 	docs.SwaggerInfo.Title = "API Documentation"
 	docs.SwaggerInfo.Version = "1.0"
 	docs.SwaggerInfo.Host = "localhost:8080"
 	docs.SwaggerInfo.BasePath = "/"
 
-	startServer(db)
+	startServer(db, baseURL)
 }
 
 // getEnv retrieves an environment variable or returns a default value
@@ -52,7 +55,7 @@ func getEnv(key, defaultValue string) string {
 }
 
 // HTTP server and router setup
-func setupRouter(db *sql.DB) *chi.Mux {
+func setupRouter(db *sql.DB, baseURL string) *chi.Mux {
 	router := chi.NewRouter()
 
 	// Middleware para habilitar CORS
@@ -66,7 +69,7 @@ func setupRouter(db *sql.DB) *chi.Mux {
 	}))
 
 	// Rotas para Dair Carteira
-	dairHandler := handler.NewDairCarteiraHandler(usecase.NewDairCarteiraUseCase(db))
+	dairHandler := handler.NewDairCarteiraHandler(usecase.NewDairCarteiraUseCase(db, baseURL))
 	router.Get("/dair_carteira", dairHandler.GetDairCarteiraHandler)
 	router.Post("/buscar_dair_carteira", dairHandler.BuscarDairCarteiraHandler)
 
@@ -85,8 +88,8 @@ func setupRouter(db *sql.DB) *chi.Mux {
 }
 
 // Função principal para iniciar o servidor HTTP
-func startServer(db *sql.DB) {
-	router := setupRouter(db)
+func startServer(db *sql.DB, baseURL string) {
+	router := setupRouter(db, baseURL)
 
 	port := getEnv("PORT", "8080")
 	log.Println("Iniciando servidor na porta:", port)
